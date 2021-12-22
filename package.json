@@ -1,6 +1,6 @@
 {
   "name": "graph-format-converter",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Typescript library used to convert a graph format to another\n\n",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,7 @@
     "prebuild": "npm run clean && eslint . --ext .ts --fix",
     "clean": "rm -rf dist",
     "build": "tsc",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
