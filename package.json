@@ -1,0 +1,45 @@
+{
+  "name": "graph-format-converter",
+  "version": "1.0.0",
+  "description": "Typescript library used to convert a graph format to another\n\n",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "npm run clean && eslint . --ext .ts --fix",
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:MrWormsy/graph-format-converter.git"
+  },
+  "keywords": [
+    "Typescript",
+    "Graphml",
+    "Gexf",
+    "JSON",
+    "Graph"
+  ],
+  "author": "MrWormsy or Anrosa (antonin.martin.rosa@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrWormsy/graph-format-converter/issues"
+  },
+  "homepage": "https://github.com/MrWormsy/graph-format-converter#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.1",
+    "@types/tinycolor2": "^1.4.3",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "eslint": "^8.1.0",
+    "fast-xml-parser": "^4.0.0-beta.8",
+    "tinycolor2": "^1.4.2"
+  }
+}
