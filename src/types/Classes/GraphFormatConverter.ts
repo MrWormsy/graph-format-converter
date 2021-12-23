@@ -348,7 +348,7 @@ export class GraphFormatConverter {
         const builder = new XMLBuilder(GraphFormatConverter.options);
 
         // Return the XML built and "fix" the <?xml ... /></?xml> to <?xml ... ?> and replace the backspace chars
-        return builder.build(root).replace(/><\/\?xml>/, "?>").replace("\b", "");
+        return builder.build(root).replace(/><\/\?xml>/, "?>").replace(new RegExp("\b", ""), "");
     }
 
     /**
