@@ -48,11 +48,17 @@ jsonInstance.toGraphml();
 // - Gexf string (to see the file format => https://gephi.org/gexf/1.2draft/gexf-12draft-primer.pdf)
 // - Graphml string (to see the file format => http://graphml.graphdrawing.org/primer/graphml-primer.html#Graph)
 
+// - Graphology as JSON exported graph (https://graphology.github.io/serialization.html#export)
+
 const gexfInstance = GraphFormatConverter.fromGexf(graphAsGexfString);
 
 // Or
 
 const graphmlInstance = GraphFormatConverter.fromGraphml(graphAsGraphmlString);
+
+// Or 
+
+const graphologyInstance = GraphFormatConverter.fromGraphology(graphAsJSONExportedFromGraphology);
 ```
 
 # "Test"

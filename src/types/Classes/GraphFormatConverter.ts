@@ -132,6 +132,35 @@ export class GraphFormatConverter {
     }
 
     /**
+     * Create a graph
+     * @param graphData
+     * @return GraphFormatConverter The Graph from the Graphology JSON graph data
+     */
+    public static fromGraphology = (graphData: {nodes: any[], edges: any[]}): GraphFormatConverter => {
+
+        // The graphology JSON graph representation is a bit tricky as it does not follow the "Gephi convention"
+        graphData.nodes = graphData.nodes.map((node) => {
+            return {
+                id: node.key,
+                ...node.attributes
+            }
+        });
+
+        graphData.edges = graphData.edges.map((edge) => {
+            return {
+                id: edge.key,
+                source: edge.source,
+                target: edge.target,
+                undirected: edge.undirected,
+                ...edge.attributes
+            }
+        });
+
+        // Now return the graph as it would be in JSON
+        return GraphFormatConverter.fromJson(graphData);
+    }
+
+    /**
      * Create a graph from a GEXF string
      * @param graphData The data of the graph as GEXF
      * @return GraphFormatConverter The Graph from the GEXF graph data
