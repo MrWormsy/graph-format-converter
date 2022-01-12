@@ -79,7 +79,12 @@ export class GraphFormatConverter {
 
                     // There are some key that should not be in the attributes object
                     if (elementKey !== "attributes" && elementKey !== "color" && elementKey !== "id" && elementKey !== "size" && elementKey !== "weight" && elementKey !== "target" && elementKey !== "source" && elementKey !== "label" && elementKey !== "edgelabel" && elementKey !== "shape" && elementKey !== "x" && elementKey !== "y" && elementKey !== "z") {
-                        element.attributes[elementKey] = element[elementKey];
+
+                        // If the value is not undefined we can use it
+                        if (element[elementKey] !== undefined) {
+                            element.attributes[elementKey] = element[elementKey];
+                        }
+
                         delete element[elementKey];
                     }
                 }

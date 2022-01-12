@@ -5,8 +5,8 @@ Typescript library used to convert a graph format to another
 
 You can install Graph Format Converter using npm:
 
-```sh
-$ npm install graph-format-converter --save
+```shell
+npm install graph-format-converter --save
 ```
 
 # Usage
