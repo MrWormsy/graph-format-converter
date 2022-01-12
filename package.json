@@ -1,6 +1,6 @@
 {
   "name": "graph-format-converter",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Typescript library used to convert a graph format to another\n\n",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,8 @@
     "Graphml",
     "Gexf",
     "JSON",
-    "Graph"
+    "Graph",
+    "Graphology"
   ],
   "author": "MrWormsy or Anrosa (antonin.martin.rosa@gmail.com)",
   "license": "ISC",
