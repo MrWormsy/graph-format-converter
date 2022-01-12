@@ -54,3 +54,12 @@ const gexfInstance = GraphFormatConverter.fromGexf(graphAsGexfString);
 
 const graphmlInstance = GraphFormatConverter.fromGraphml(graphAsGraphmlString);
 ```
+
+# "Test"
+
+To test that the graphs are working well you can run the following command after building the sources
+```shell
+npm test
+```
+
+You will have the folder `data/output` populated with graphs files, try to open them with Gephi to see if everything works !
