@@ -41,7 +41,8 @@ export class GraphFormatConverter {
     private static builderOptions = {
         ignoreAttributes: false,
         attributeNamePrefix: "@_@_@_",
-        allowBooleanAttributes: false,
+        allowBooleanAttributes: true,
+        suppressBooleanAttributes: false,
         removeNSPrefix: true,
         parseAttributeValue: true,
         format: true
