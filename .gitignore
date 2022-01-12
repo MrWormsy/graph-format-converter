@@ -2,3 +2,4 @@
 /.idea/
 /dist
 /tsconfig.tsbuildinfo
+/data/output/
