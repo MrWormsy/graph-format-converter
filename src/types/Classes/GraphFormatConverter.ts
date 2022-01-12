@@ -84,6 +84,12 @@ export class GraphFormatConverter {
                     }
                 }
 
+                // If there is the attribute size for an edge it needs to be weight as size is only of the nodes but sometimes we use size for edges as well
+                if (!isNode && element.size !== undefined) {
+                    element.weight = element.size;
+                    delete element.size;
+                }
+
                 return element;
             });
         }
@@ -263,15 +269,15 @@ export class GraphFormatConverter {
      */
     public toJson = (): { nodes: any[], edges: any[] } => {
         return {
-            nodes: this.nodes.map((node) => {
+            nodes: this.getNodes().map((node) => {
                 if (node.color !== undefined) {
-                    node.color = node.color.toRgbString();
+                    node.color = tinycolor2(node.color).toRgbString();
                 }
                 return node;
             }),
-            edges: this.edges.map((edge) => {
+            edges: this.getEdges().map((edge) => {
                 if (edge.color !== undefined) {
-                    edge.color = edge.color.toRgbString();
+                    edge.color = tinycolor2(edge.color).toRgbString();
                 }
                 return edge;
             })
@@ -285,8 +291,8 @@ export class GraphFormatConverter {
     public toGexf = (): string => {
 
         // Get the nodes and the edges as formatted JSON
-        const nodes: any[] = this.nodes.map(GraphFormatConverter.getElementAsGexfJSON);
-        const edges: any[] = this.edges.map(GraphFormatConverter.getElementAsGexfJSON);
+        const nodes: any[] = this.getNodes().map(GraphFormatConverter.getElementAsGexfJSON);
+        const edges: any[] = this.getEdges().map(GraphFormatConverter.getElementAsGexfJSON);
 
         // The attributes a node can take
         const nodeAttributes: any[] = this.nodeAttributes.map((attribute) => {
@@ -361,8 +367,8 @@ export class GraphFormatConverter {
         let doesColorNotExistForNodes,doesColorNotExistForEdges , doesXNotExistForNodes , doesYNotExistForNodes , doesZNotExistForNodes , doesXNotExistForEdges , doesYNotExistForEdges , doesZNotExistForEdges, doesLabelNotExistForNodes , doesLabelNotExistForEdges, doesEdgelabelNotExistForEdges, doesSizeNotExistForNodes, doesSizeNotExistForEdges, doesShapeNotExistForNodes, doesShapeNotExistForEdges, doesWeightNotExistForEdges, doesThicknessNotExistForEdges;
 
         // Get the nodes and the edges as formatted JSON
-        const nodes: any[] = this.nodes.map(GraphFormatConverter.getElementAsGraphmlJSON);
-        const edges: any[] = this.edges.map(GraphFormatConverter.getElementAsGraphmlJSON);
+        const nodes: any[] = this.getNodes().map(GraphFormatConverter.getElementAsGraphmlJSON);
+        const edges: any[] = this.getEdges().map(GraphFormatConverter.getElementAsGraphmlJSON);
 
         // Create the keys (the attributes)
         const keys: any[] = [];
@@ -553,9 +559,9 @@ export class GraphFormatConverter {
                     elementObject[`${GraphFormatConverter.options.attributeNamePrefix}target`] = value;
                     break;
                 case "color":
-                    elementObject.data.push({[`${GraphFormatConverter.options.attributeNamePrefix}key`]: "r", "#text": value.toRgb().r});
-                    elementObject.data.push({[`${GraphFormatConverter.options.attributeNamePrefix}key`]: "g", "#text": value.toRgb().g});
-                    elementObject.data.push({[`${GraphFormatConverter.options.attributeNamePrefix}key`]: "b", "#text": value.toRgb().b});
+                    elementObject.data.push({[`${GraphFormatConverter.options.attributeNamePrefix}key`]: "r", "#text": tinycolor2(value).toRgb().r});
+                    elementObject.data.push({[`${GraphFormatConverter.options.attributeNamePrefix}key`]: "g", "#text": tinycolor2(value).toRgb().g});
+                    elementObject.data.push({[`${GraphFormatConverter.options.attributeNamePrefix}key`]: "b", "#text": tinycolor2(value).toRgb().b});
                     break;
                 default:
                     elementObject.data.push({
@@ -613,9 +619,9 @@ export class GraphFormatConverter {
                     break;
                 case "color":
                     elementObject["viz:color"] = {
-                        [`${GraphFormatConverter.options.attributeNamePrefix}r`]: value.toRgb().r,
-                        [`${GraphFormatConverter.options.attributeNamePrefix}g`]: value.toRgb().g,
-                        [`${GraphFormatConverter.options.attributeNamePrefix}b`]: value.toRgb().b
+                        [`${GraphFormatConverter.options.attributeNamePrefix}r`]: tinycolor2(value).toRgb().r,
+                        [`${GraphFormatConverter.options.attributeNamePrefix}g`]: tinycolor2(value).toRgb().g,
+                        [`${GraphFormatConverter.options.attributeNamePrefix}b`]: tinycolor2(value).toRgb().b
                     }
                     break;
                 // The position is set in an other way
@@ -981,6 +987,6 @@ export class GraphFormatConverter {
      * @return any[] The edges of the graph
      */
     public getEdges = (): any[] => {
-        return this.nodes;
+        return this.edges;
     }
 }
