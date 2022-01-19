@@ -121,14 +121,21 @@ export class GraphFormatConverter {
         const edgeAttributes: IEdgeAttribute[] = GraphFormatConverter.getAttributesFromGuesser(edgeAttributesObject);
 
         // We set the most generic graph attributes possible
+        if (graphData.attributes === undefined) {
+            graphData.attributes = {
+                id: "graph",
+                edgeType: "undirected",
+                mode: "static"
+            };
+        }
         const graphAttributes: IGraphAttribute = {
-            id: "graph",
-            edgeType: "undirected",
-            mode: "static"
+            id: graphData.attributes.id !== undefined ? graphData.attributes.id : "graph",
+            edgeType: graphData.attributes.edgeType !== undefined ? graphData.attributes.edgeType : "undirected",
+            mode: graphData.attributes.mode !== undefined ? graphData.attributes.mode : "static"
         };
 
         // Return the GraphFormatConverter
-        return new GraphFormatConverter(graphData.nodes, graphData.edges, nodeAttributes, edgeAttributes, {...graphAttributes, ...graphData.attributes});
+        return new GraphFormatConverter(graphData.nodes, graphData.edges, nodeAttributes, edgeAttributes, graphAttributes);
     }
 
     /**

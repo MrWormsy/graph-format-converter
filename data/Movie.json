@@ -1,4 +1,9 @@
 {
+  "attributes": {
+    "id": "Twitter Graph",
+    "edgeType": "directed",
+    "mode": "static"
+  },
   "nodes": [
     {
       "label": "JACK",
