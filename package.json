@@ -1,6 +1,6 @@
 {
   "name": "graph-format-converter",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Typescript library used to convert a graph format to another\n\n",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

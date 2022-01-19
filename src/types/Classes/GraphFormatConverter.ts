@@ -53,7 +53,7 @@ export class GraphFormatConverter {
      * @param graphData The data of the graph as JSON
      * @return GraphFormatConverter The Graph from the JSON graph data
      */
-    public static fromJson = (graphData: { nodes: any[], edges: any[] }): GraphFormatConverter => {
+    public static fromJson = (graphData: { nodes: any[], edges: any[], attributes: IGraphAttribute }): GraphFormatConverter => {
 
         // The objects that will contain the attributes of the nodes and edges
         const nodeAttributesObject: any = {};
@@ -128,7 +128,7 @@ export class GraphFormatConverter {
         };
 
         // Return the GraphFormatConverter
-        return new GraphFormatConverter(graphData.nodes, graphData.edges, nodeAttributes, edgeAttributes, graphAttributes);
+        return new GraphFormatConverter(graphData.nodes, graphData.edges, nodeAttributes, edgeAttributes, {...graphAttributes, ...graphData.attributes});
     }
 
     /**
@@ -136,7 +136,7 @@ export class GraphFormatConverter {
      * @param graphData
      * @return GraphFormatConverter The Graph from the Graphology JSON graph data
      */
-    public static fromGraphology = (graphData: {nodes: any[], edges: any[]}): GraphFormatConverter => {
+    public static fromGraphology = (graphData: {nodes: any[], edges: any[], attributes: IGraphAttribute}): GraphFormatConverter => {
 
         // The graphology JSON graph representation is a bit tricky as it does not follow the "Gephi convention"
         graphData.nodes = graphData.nodes.map((node) => {
@@ -314,8 +314,9 @@ export class GraphFormatConverter {
      * Get the JSON format of the graph
      * @return {nodes: any[], edges: any[]} The graph a JSON Object
      */
-    public toJson = (): { nodes: any[], edges: any[] } => {
+    public toJson = (): { nodes: any[], edges: any[], attributes: IGraphAttribute } => {
         return {
+            attributes: this.getAttributes(),
             nodes: this.getNodes().map((node) => {
                 if (node.color !== undefined) {
                     node.color = tinycolor2(node.color).toRgbString();
@@ -338,7 +339,8 @@ export class GraphFormatConverter {
     public toGraphology = (): { nodes: any[], edges: any[], attributes: any } => {
         return {
             attributes: {
-                name: this.getAttributes().id
+                name: this.getAttributes().id,
+                ...this.getAttributes()
             },
             nodes: this.getNodes().map((node) => {
                 if (node.color !== undefined) {
