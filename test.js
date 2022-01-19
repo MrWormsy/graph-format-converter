@@ -44,3 +44,8 @@ fs.writeFileSync("data/output/GEXF_TO_GRAPHML.graphml", gexfGraph.toGraphml())
 fs.writeFileSync("data/output/GRAPHML_TO_GRAPHML.graphml", graphmlGraph.toGraphml())
 // GEPHI : OK | UI : OK
 fs.writeFileSync("data/output/GRAPHOLOGY_TO_GRAPHML.graphml", graphologyJGraph.toGraphml())
+
+
+const jsonFile2 = JSON.parse(fs.readFileSync("data/GRAPH.json", "utf8"))
+const jsonGraph2 = GraphFormatConverter.fromJson(jsonFile2);
+fs.writeFileSync("data/output/GRAPH.json", JSON.stringify(jsonGraph2.toGraphology(), null, '\t'))

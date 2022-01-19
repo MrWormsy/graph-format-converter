@@ -332,6 +332,45 @@ export class GraphFormatConverter {
     }
 
     /**
+     * Get the JSON Graphology format of the graph
+     * @return {nodes: any[], edges: any[], attributes: any[]} The graph a JSON Object
+     */
+    public toGraphology = (): { nodes: any[], edges: any[], attributes: any } => {
+        return {
+            attributes: {
+                name: this.getAttributes().id
+            },
+            nodes: this.getNodes().map((node) => {
+                if (node.color !== undefined) {
+                    node.color = tinycolor2(node.color).toRgbString();
+                }
+
+                // If there is not key, set it with the id
+                if (node.key === undefined) {
+                    node.key = node.id;
+                }
+
+                return node;
+            }),
+            edges: this.getEdges().map((edge) => {
+                if (edge.color !== undefined) {
+                    edge.color = tinycolor2(edge.color).toRgbString();
+                }
+
+                // If there is not key, set it with the id if it exists, else we don't care
+                if (edge.key === undefined && edge.id !== undefined) {
+                    edge.key = edge.id;
+                }
+
+                // Si if the graph is undirected
+                edge.undirected = this.getAttributes().edgeType === "undirected";
+
+                return edge;
+            })
+        }
+    }
+
+    /**
      * Get the GEXF format of the graph
      * @return string The graph a GEXF string Object
      */
@@ -1035,5 +1074,13 @@ export class GraphFormatConverter {
      */
     public getEdges = (): any[] => {
         return this.edges;
+    }
+
+    /**
+     * Get the attributes of the graph on a JSON format
+     * @return any[] The attributes of the graph
+     */
+    public getAttributes = (): IGraphAttribute => {
+        return this.graphAttributes;
     }
 }
