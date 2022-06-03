@@ -2,7 +2,7 @@ import {XMLBuilder, XMLParser} from "fast-xml-parser";
 import {IAttribute, IEdgeAttribute, IGraphAttribute, INodeAttribute} from "../Interfaces";
 import tinycolor2 from "tinycolor2";
 import {AttributeType} from "../Types";
-import {AbstractGraph, Attributes, SerializedGraph} from "graphology-types";
+import {AbstractGraph, Attributes, SerializedEdge, SerializedGraph, SerializedNode} from "graphology-types";
 
 /**
  * The GraphFormatConverter class
@@ -803,8 +803,7 @@ export class GraphFormatConverter {
         delete attributes.id;
 
         // Handle the nodes
-        const nodes = {...this.getNodes()};
-        nodes.forEach((node) => {
+        const nodes: Array<SerializedNode<Attributes>> = this.getNodes().map((node) => {
             if (node.color !== undefined) {
                 node.color = tinycolor2(node.color).toRgbString();
             }
@@ -814,11 +813,12 @@ export class GraphFormatConverter {
                 node.key = node.id;
                 delete node.id
             }
+
+            return node;
         })
 
         // Handle the edges
-        const edges = {...this.getEdges()};
-        edges.forEach((edge) => {
+        const edges: Array<SerializedEdge<Attributes>> = this.getEdges().map((edge) => {
             if (edge.color !== undefined) {
                 edge.color = tinycolor2(edge.color).toRgbString();
             }
@@ -831,6 +831,8 @@ export class GraphFormatConverter {
 
             // If the graph is undirected
             edge.undirected = this.getAttributes().edgeType === "undirected";
+
+            return edge
         })
 
         return {
