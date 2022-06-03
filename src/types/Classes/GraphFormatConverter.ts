@@ -2,7 +2,7 @@ import {XMLBuilder, XMLParser} from "fast-xml-parser";
 import {IAttribute, IEdgeAttribute, IGraphAttribute, INodeAttribute} from "../Interfaces";
 import tinycolor2 from "tinycolor2";
 import {AttributeType} from "../Types";
-import {Attributes} from "graphology-types";
+import {AbstractGraph, Attributes, SerializedGraph} from "graphology-types";
 
 /**
  * The GraphFormatConverter class
@@ -793,41 +793,51 @@ export class GraphFormatConverter {
 
     /**
      * Get the JSON Graphology format of the graph
-     * @return {nodes: Attributes, edges: Attributes, attributes: any} The graph a JSON Object
+     * @return SerializedGraph<Attributes, Attributes, any> | AbstractGraph<Attributes, Attributes, any> The graph as a Graphology JSON Object
      */
-    public toGraphology = (): { nodes: Attributes, edges: Attributes, attributes: any } => {
+    public toGraphology = (): SerializedGraph<Attributes, Attributes, any> | AbstractGraph<Attributes, Attributes, any> => {
+
+        // Handle the attributes
+        const attributes: Attributes = {...this.getAttributes()}
+        attributes.name = attributes.id;
+        delete attributes.id;
+
+        // Handle the nodes
+        const nodes = {...this.getNodes()};
+        nodes.forEach((node) => {
+            if (node.color !== undefined) {
+                node.color = tinycolor2(node.color).toRgbString();
+            }
+
+            // If there is no key, set it with the id
+            if (node.key === undefined) {
+                node.key = node.id;
+                delete node.id
+            }
+        })
+
+        // Handle the edges
+        const edges = {...this.getEdges()};
+        edges.forEach((edge) => {
+            if (edge.color !== undefined) {
+                edge.color = tinycolor2(edge.color).toRgbString();
+            }
+
+            // If there is no key, set it with the id if it exists, else we don't care
+            if (edge.key === undefined && edge.id !== undefined) {
+                edge.key = edge.id;
+                delete edge.id
+            }
+
+            // If the graph is undirected
+            edge.undirected = this.getAttributes().edgeType === "undirected";
+        })
+
         return {
-            attributes: {
-                name: this.getAttributes().id,
-                ...this.getAttributes()
-            },
-            nodes: this.getNodes().map((node) => {
-                if (node.color !== undefined) {
-                    node.color = tinycolor2(node.color).toRgbString();
-                }
-
-                // If there is not key, set it with the id
-                if (node.key === undefined) {
-                    node.key = node.id;
-                }
-
-                return node;
-            }),
-            edges: this.getEdges().map((edge) => {
-                if (edge.color !== undefined) {
-                    edge.color = tinycolor2(edge.color).toRgbString();
-                }
-
-                // If there is no key, set it with the id if it exists, else we don't care
-                if (edge.key === undefined && edge.id !== undefined) {
-                    edge.key = edge.id;
-                }
-
-                // If the graph is undirected
-                edge.undirected = this.getAttributes().edgeType === "undirected";
-
-                return edge;
-            })
+            attributes,
+            options: {},
+            nodes,
+            edges
         }
     }
 
