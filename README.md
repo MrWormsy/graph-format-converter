@@ -1,4 +1,5 @@
 # graph-format-converter
+
 Typescript library used to convert a graph format to another
 
 # Installation
@@ -64,6 +65,7 @@ const graphologyInstance = GraphFormatConverter.fromGraphology(graphAsJSONExport
 # "Test"
 
 To test that the graphs are working well you can run the following command after building the sources
+
 ```shell
 npm test
 ```
