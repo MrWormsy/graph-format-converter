@@ -149,18 +149,24 @@ export class GraphFormatConverter {
         for (const key in currentObject) {
             const value = currentObject[key];
 
-            if (value.constructor !== Object) {
-                if (previousKeyName == null || previousKeyName == '') {
+            if (typeof value !== "object") {
+
+                if (previousKeyName == null || previousKeyName === '') {
                     newObject[key] = value;
                 } else {
-                    if (key == null || key == '') {
+                    if (key == null || key === '') {
                         newObject[previousKeyName] = value;
                     } else {
                         newObject[previousKeyName + '.' + key] = value;
                     }
                 }
             } else {
-                if (previousKeyName == null || previousKeyName == '') {
+
+                if (Array.isArray(value)) {
+                    continue;
+                }
+
+                if (previousKeyName == null || previousKeyName === '') {
                     GraphFormatConverter.flattenHelper(value, newObject, key);
                 } else {
                     GraphFormatConverter.flattenHelper(value, newObject, previousKeyName + '.' + key);
