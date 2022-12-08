@@ -2,6 +2,10 @@
 const fs = require("fs");
 const {GraphFormatConverter} = require("./dist/index")
 
+if (!fs.existsSync("data/output")){
+    fs.mkdirSync("data/output");
+}
+
 // Read the JSON file
 const jsonFile = JSON.parse(fs.readFileSync("data/Movie.json", "utf8"))
 const jsonGraph = GraphFormatConverter.fromJson(jsonFile);

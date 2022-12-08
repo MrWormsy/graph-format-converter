@@ -140,6 +140,38 @@ export class GraphFormatConverter {
     }
 
     /**
+     * Flatten an object for Graphology
+     * @param currentObject The current object
+     * @param newObject The new object
+     * @param previousKeyName The previous key
+     */
+    public static flattenHelper<T>(currentObject: any, newObject: any = {}, previousKeyName = ''): T {
+        for (const key in currentObject) {
+            const value = currentObject[key];
+
+            if (value.constructor !== Object) {
+                if (previousKeyName == null || previousKeyName == '') {
+                    newObject[key] = value;
+                } else {
+                    if (key == null || key == '') {
+                        newObject[previousKeyName] = value;
+                    } else {
+                        newObject[previousKeyName + '.' + key] = value;
+                    }
+                }
+            } else {
+                if (previousKeyName == null || previousKeyName == '') {
+                    GraphFormatConverter.flattenHelper(value, newObject, key);
+                } else {
+                    GraphFormatConverter.flattenHelper(value, newObject, previousKeyName + '.' + key);
+                }
+            }
+        }
+
+        return newObject;
+    }
+
+    /**
      * Create a graph
      * @param graphData
      * @return GraphFormatConverter The Graph from the Graphology JSON graph data
@@ -814,7 +846,7 @@ export class GraphFormatConverter {
                 delete node.id
             }
 
-            return node;
+            return GraphFormatConverter.flattenHelper<SerializedNode<Attributes>>(node);
         })
 
         // Handle the edges
@@ -832,7 +864,7 @@ export class GraphFormatConverter {
             // If the graph is undirected
             edge.undirected = this.getAttributes().edgeType === "undirected";
 
-            return edge
+            return GraphFormatConverter.flattenHelper<SerializedEdge<Attributes>>(edge);
         })
 
         return {
