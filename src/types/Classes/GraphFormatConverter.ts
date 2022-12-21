@@ -149,7 +149,7 @@ export class GraphFormatConverter {
         for (const key in currentObject) {
             const value = currentObject[key];
 
-            if (typeof value !== "object") {
+            if (typeof value !== "object" || key === "attributes") {
 
                 if (previousKeyName == null || previousKeyName === '') {
                     newObject[key] = value;
